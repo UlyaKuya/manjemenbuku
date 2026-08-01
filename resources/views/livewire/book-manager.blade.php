@@ -88,21 +88,24 @@
                             </td>
 
                             <td class="px-4 py-3 text-center space-x-2">
+
                                 @can('update', $book)
                                 <button
                                     wire:click="edit({{ $book->id }})"
                                     class="px-3 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white">
                                     Edit
                                 </button>
-                                @can('update', $book)
+                                @endcan
+
+                                @can('delete', $book)
                                 <button
                                     wire:click="confirmDelete({{ $book->id }})"
                                     class="px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white">
                                     Hapus
                                 </button>
+                                @endcan
 
                             </td>
-
                         </tr>
 
                         @empty

@@ -14,14 +14,16 @@ trait HasRoles
 
     public function hasRole(string $role): bool
     {
-        return $this->roles->contains('name', $role);
+        return $this->roles()
+            ->where('name', $role)
+            ->exists();
     }
 
     public function hasAnyRole(array $roles): bool
     {
-        return $this->roles
+        return $this->roles()
             ->whereIn('name', $roles)
-            ->isNotEmpty();
+            ->exists();
     }
 
     public function assignRole(string|Role $role): void
