@@ -1,6 +1,6 @@
 # 📚 Sistem Manajemen Buku Perpustakaan
 
-Aplikasi Manajemen Buku berbasis **Laravel 12** dan **Livewire 3** sebagai tugas mata kuliah Pemrograman Web.
+Aplikasi Manajemen Buku berbasis **Laravel 12** dan **Livewire 3** sebagai tugas mata kuliah Pemrograman Web2.
 
 ---
 
@@ -67,7 +67,7 @@ Semua akun menggunakan password yang sama:
 
 ## 👤 Pengembang
 
-**Nama:** Ulya Panwasusan
+**Nama:** Ulya Panwasusana / NRP 241226004 Ubhinus Malang 2026
 
 **Framework:** Laravel 12
 
