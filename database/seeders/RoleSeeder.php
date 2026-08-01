@@ -12,28 +12,27 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        Role::create([
-            'name' => 'superadmin',
-            'label' => 'Super Administrator',
-            'description' => 'Mengelola seluruh sistem',
-        ]);
-
-        Role::create([
-            'name' => 'admin',
-            'label' => 'Administrator',
-            'description' => 'Mengelola seluruh data buku',
-        ]);
-
-        Role::create([
-            'name' => 'petugas',
-            'label' => 'Petugas Perpustakaan',
-            'description' => 'Mengelola operasional perpustakaan',
-        ]);
-
-        Role::create([
-            'name' => 'member',
-            'label' => 'Anggota',
-            'description' => 'Pengguna perpustakaan',
+        Role::insert([
+            [
+                'name' => 'superadmin',
+                'label' => 'Super Administrator',
+                'description' => 'Mengelola seluruh sistem',
+            ],
+            [
+                'name' => 'admin',
+                'label' => 'Administrator',
+                'description' => 'Mengelola seluruh data',
+            ],
+            [
+                'name' => 'petugas',
+                'label' => 'Petugas Perpustakaan',
+                'description' => 'Mengelola operasional perpustakaan',
+            ],
+            [
+                'name' => 'member',
+                'label' => 'Anggota',
+                'description' => 'Pengguna perpustakaan',
+            ],
         ]);
     }
 }
