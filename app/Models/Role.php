@@ -22,4 +22,21 @@ class Role extends Model
     {
         return $this->belongsToMany(Permission::class);
     }
+    public function givePermissionTo(string|Permission $permission): static
+    {
+        if (is_string($permission)) {
+            $permission = Permission::where('name', $permission)->firstOrFail();
+        }
+
+        $this->permissions()->syncWithoutDetaching($permission->id);
+
+        return $this;
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        return $this->permissions()
+            ->where('name', $permission)
+            ->exists();
+    }
 }

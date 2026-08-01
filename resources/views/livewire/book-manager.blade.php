@@ -14,12 +14,13 @@
                 </p>
             </div>
 
+            @can('create', App\Models\Book::class)
             <button
                 wire:click="create"
-                class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2 rounded-lg transition">
-                + Tambah Buku
+                class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
+                Tambah Buku
             </button>
-
+            @endcan
         </div>
 
         @if(session()->has('success'))
@@ -48,6 +49,11 @@
 
             <div class="overflow-x-auto">
 
+                @php
+                $showAction = auth()->user()->hasPermission('books.update')
+                || auth()->user()->hasPermission('books.delete');
+                @endphp
+
                 <table class="min-w-full divide-y divide-gray-200">
 
                     <thead class="bg-gray-50">
@@ -57,7 +63,10 @@
                             <th class="px-4 py-3 text-left">Penulis</th>
                             <th class="px-4 py-3 text-left">Penerbit</th>
                             <th class="px-4 py-3 text-left">Tahun</th>
+
+                            @if($showAction)
                             <th class="px-4 py-3 text-center">Aksi</th>
+                            @endif
                         </tr>
                     </thead>
 
@@ -87,6 +96,7 @@
                                 {{ $book->year }}
                             </td>
 
+                            @if($showAction)
                             <td class="px-4 py-3 text-center space-x-2">
 
                                 @can('update', $book)
@@ -106,12 +116,14 @@
                                 @endcan
 
                             </td>
+                            @endif
+
                         </tr>
 
                         @empty
 
                         <tr>
-                            <td colspan="6" class="text-center py-10 text-gray-500">
+                            <td colspan="{{ $showAction ? 6 : 5 }}" class="text-center py-10 text-gray-500">
                                 Belum ada data buku.
                             </td>
                         </tr>
