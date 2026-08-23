@@ -29,6 +29,13 @@ class RolePermissionSeeder extends Seeder
             $permissions['users.create'],
             $permissions['users.update'],
             $permissions['users.delete'],
+
+            $permissions['categories.view'],
+            $permissions['categories.create'],
+            $permissions['categories.update'],
+            $permissions['categories.delete'],
+
+
         ]);
 
         // Admin
@@ -42,6 +49,13 @@ class RolePermissionSeeder extends Seeder
             $permissions['users.create'],
             $permissions['users.update'],
             $permissions['users.delete'],
+
+            $permissions['categories.view'],
+            $permissions['categories.create'],
+            $permissions['categories.update'],
+            $permissions['categories.delete'],
+
+
         ]);
 
         // Petugas
@@ -49,12 +63,18 @@ class RolePermissionSeeder extends Seeder
             $permissions['books.view'],
             $permissions['books.create'],
             $permissions['books.update'],
-            
+
+            $permissions['categories.view'],
+            $permissions['categories.create'],
+            $permissions['categories.update'],
+
+
         ]);
 
         // Member
         $member->permissions()->sync([
             $permissions['books.view'],
+            $permissions['categories.view'],
         ]);
     }
 }

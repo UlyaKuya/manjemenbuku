@@ -18,6 +18,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::view('/books', 'books.index')->name('books');
 
+    Route::get('/categories', function () {
+        return view('categories.index');
+    })->name('categories');
+
+
     Route::get('/users', [UserController::class, 'index'])
         ->name('users.index');
 
@@ -43,7 +48,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         foreach ($books as $book) {
             $result[] = [
                 'title' => $book->title,
-                'category' => $book->category->name,
+                'category' => $book->category?->name ?? 'Tanpa Kategori',
             ];
         }
 

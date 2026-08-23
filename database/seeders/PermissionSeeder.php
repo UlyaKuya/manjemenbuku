@@ -30,6 +30,28 @@ class PermissionSeeder extends Seeder
                 'label' => 'Hapus Buku',
                 'category' => 'books',
             ],
+
+            [
+                'name' => 'categories.view',
+                'label' => 'Lihat Kategori',
+                'category' => 'categories',
+            ],
+            [
+                'name' => 'categories.create',
+                'label' => 'Tambah Kategori',
+                'category' => 'categories',
+            ],
+            [
+                'name' => 'categories.update',
+                'label' => 'Edit Kategori',
+                'category' => 'categories',
+            ],
+            [
+                'name' => 'categories.delete',
+                'label' => 'Hapus Kategori',
+                'category' => 'categories',
+            ],
+
             [
                 'name' => 'users.view',
                 'label' => 'Lihat User',

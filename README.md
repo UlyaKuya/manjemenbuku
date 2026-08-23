@@ -1,74 +1,82 @@
 # 📚 Sistem Manajemen Buku Perpustakaan
 
-Aplikasi Manajemen Buku berbasis **Laravel 12** dan **Livewire 3** sebagai tugas mata kuliah Pemrograman Web2.
+Aplikasi web manajemen perpustakaan berbasis **Laravel 12** dan **Livewire 3**.
+
+Aplikasi menyediakan pengelolaan buku dan kategori dengan sistem autentikasi, role, permission, serta authorization berdasarkan hak akses pengguna.
 
 ---
 
-## 👨‍💻 Teknologi
+## 🛠️ Teknologi
 
 - Laravel 12
 - Livewire 3
 - Tailwind CSS
-- MySQL
+- SQLite / database relasional
+- PHPUnit
 
 ---
 
-## ⚙️ Cara Instalasi
+## ✨ Fitur Aplikasi
 
-```bash
-git clone https://github.com/UlyaKuya/manjemenbuku.git
+### 🔐 Autentikasi
 
-cd manjemenbuku
+- Login
+- Logout
+- Registrasi
+- Verifikasi email
+- Reset password
+- Update password
+- Manajemen profil
 
-composer install
+### 👥 Manajemen Role & Permission
 
-npm install
+Aplikasi menggunakan sistem role dan permission untuk membatasi akses pengguna.
 
-cp .env.example .env
+Role yang tersedia:
 
-php artisan key:generate
+- Super Administrator
+- Administrator
+- Petugas Perpustakaan
+- Anggota
 
-php artisan migrate:fresh --seed
+### 📚 Manajemen Buku
 
-npm run dev
+Modul buku dibangun menggunakan Livewire dan menyediakan:
 
-php artisan serve
-```
+- Menampilkan daftar buku
+- Menambahkan buku
+- Mengubah buku
+- Menghapus buku
+- Pencarian berdasarkan judul
+- Pencarian berdasarkan penulis
+- Pencarian berdasarkan penerbit
+- Pagination
+- Validasi data
+- Authorization berdasarkan role
 
----
+### 📂 Manajemen Kategori
 
-## 🔐 Akun Login
+Modul kategori juga dibangun menggunakan Livewire dan menyediakan:
 
-Semua akun menggunakan password yang sama:
+- Menampilkan daftar kategori
+- Menambahkan kategori
+- Mengubah kategori
+- Menghapus kategori
+- Pencarian kategori
+- Pagination
+- Menampilkan jumlah buku pada setiap kategori
+- Authorization berdasarkan role
 
-**Password:** `password`
+### 🔗 Relasi Buku dan Kategori
 
-| Role | Email |
-|------|-------|
-| Super Administrator | superadmin@app.test |
-| Administrator | admin@app.test |
-| Petugas Perpustakaan | petugas@app.test |
-| Anggota | member@app.test |
+Setiap buku dapat memiliki kategori.
 
----
+Relasi yang digunakan:
 
-## ✨ Fitur
-
-- ✅ Login & Logout
-- ✅ CRUD Buku
-- ✅ Search Buku
-- ✅ Pagination
-- ✅ Authorization Policy
-- ✅ Role & Permission
-- ✅ Multi User
-- 🚧 Custom Middleware (Dalam Pengembangan)
-
----
-
-## 👤 Pengembang
-
-**Nama:** Ulya Panwasusana / NRP 241226004 Ubhinus Malang 2026
-
-**Framework:** Laravel 12
-
-**Mata Kuliah:** Pemrograman Web 2
+```text
+Category
+   │
+   └── hasMany
+          │
+          ▼
+        Books
