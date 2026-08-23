@@ -14,14 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        Gate::policy(Book::class, BookPolicy::class);
     }
-
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        //
+        Gate::policy(Book::class, BookPolicy::class);
     }
 }
+
+

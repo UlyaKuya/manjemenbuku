@@ -7,12 +7,9 @@ use App\Models\Role;
 
 class RoleSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Role::insert([
+        $roles = [
             [
                 'name' => 'superadmin',
                 'label' => 'Super Administrator',
@@ -33,6 +30,16 @@ class RoleSeeder extends Seeder
                 'label' => 'Anggota',
                 'description' => 'Pengguna perpustakaan',
             ],
-        ]);
+        ];
+
+        foreach ($roles as $role) {
+            Role::updateOrCreate(
+                ['name' => $role['name']],
+                [
+                    'label' => $role['label'],
+                    'description' => $role['description'],
+                ]
+            );
+        }
     }
 }

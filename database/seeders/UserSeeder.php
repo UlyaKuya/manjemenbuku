@@ -8,39 +8,45 @@ use Illuminate\Support\Facades\Hash;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $superAdmin = User::create([
-            'name' => 'Super Administrator',
-            'email' => 'superadmin@app.test',
-            'password' => Hash::make('password'),
-        ]);
+        $users = [
+            [
+                'name' => 'Super Administrator',
+                'email' => 'superadmin@app.test',
+                'password' => 'password',
+                'role' => 'superadmin',
+            ],
+            [
+                'name' => 'Administrator',
+                'email' => 'admin@app.test',
+                'password' => 'password',
+                'role' => 'admin',
+            ],
+            [
+                'name' => 'Petugas Perpustakaan',
+                'email' => 'petugas@app.test',
+                'password' => 'password',
+                'role' => 'petugas',
+            ],
+            [
+                'name' => 'Anggota',
+                'email' => 'member@app.test',
+                'password' => 'password',
+                'role' => 'member',
+            ],
+        ];
 
-        $admin = User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@app.test',
-            'password' => Hash::make('password'),
-        ]);
+        foreach ($users as $data) {
+            $user = User::updateOrCreate(
+                ['email' => $data['email']],
+                [
+                    'name' => $data['name'],
+                    'password' => Hash::make($data['password']),
+                ]
+            );
 
-        $petugas = User::create([
-            'name' => 'Petugas Perpustakaan',
-            'email' => 'petugas@app.test',
-            'password' => Hash::make('password'),
-        ]);
-
-        $member = User::create([
-            'name' => 'Anggota',
-            'email' => 'member@app.test',
-            'password' => Hash::make('password'),
-        ]);
-
-        // Assign Role
-        $superAdmin->assignRole('superadmin');
-        $admin->assignRole('admin');
-        $petugas->assignRole('petugas');
-        $member->assignRole('member');
+            $user->assignRole($data['role']);
+        }
     }
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perpustakaan - UAS Proyek Akhir</title>
+    <title>Perpustakaan - Policy & Advanced Authorization</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -19,8 +19,7 @@
             <div class="p-10 lg:p-16 flex flex-col justify-center">
 
                 <span class="text-blue-600 font-semibold uppercase tracking-wider">
-                    UAS Pemrograman Web 2
-                </span>
+                    Reusable Component & Layout </span>
 
                 <h1 class="text-4xl font-bold text-gray-800 mt-3">
                     Manajemen Buku

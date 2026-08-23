@@ -2,11 +2,15 @@
 
 namespace App\Livewire;
 
+
 use App\Models\Book;
 use Livewire\Component;
+use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
 
+
+#[Layout('layouts.app')]
 class BookManager extends Component
 
 {
@@ -55,6 +59,8 @@ class BookManager extends Component
 
     public function create()
     {
+        $this->authorize('create', Book::class);
+
         $this->reset([
             'bookId',
             'title',
@@ -77,7 +83,11 @@ class BookManager extends Component
 
         if ($this->isEdit) {
 
-            Book::findOrFail($this->bookId)->update([
+            $book = Book::findOrFail($this->bookId);
+
+            $this->authorize('update', $book);
+
+            $book->update([
                 'title' => $this->title,
                 'author' => $this->author,
                 'publisher' => $this->publisher,
@@ -86,6 +96,8 @@ class BookManager extends Component
 
             session()->flash('success', 'Buku berhasil diperbarui.');
         } else {
+
+            $this->authorize('create', Book::class);
 
             Book::create([
                 'title'     => $this->title,
@@ -109,8 +121,12 @@ class BookManager extends Component
         $this->showModal = false;
     }
 
-    public function edit(Book $book)
+    public function edit(int $bookId)
     {
+        $book = Book::findOrFail($bookId);
+
+        $this->authorize('update', $book);
+
         $this->bookId = $book->id;
 
         $this->title = $book->title;
@@ -122,20 +138,27 @@ class BookManager extends Component
         $this->showModal = true;
     }
 
-    public function confirmDelete(Book $book)
+    public function confirmDelete(int $bookId)
     {
+        $book = Book::findOrFail($bookId);
+
+        $this->authorize('delete', $book);
+
         $this->deleteId = $book->id;
         $this->showDeleteModal = true;
     }
 
     public function delete()
     {
-        Book::findOrFail($this->deleteId)->delete();
+        $book = Book::findOrFail($this->deleteId);
+
+        $this->authorize('delete', $book);
+
+        $book->delete();
 
         $this->deleteId = null;
         $this->showDeleteModal = false;
 
-        // Reset ke halaman yang valid
         $this->resetPage();
 
         session()->flash('success', 'Buku berhasil dihapus.');

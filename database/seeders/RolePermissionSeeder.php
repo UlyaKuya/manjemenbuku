@@ -24,6 +24,11 @@ class RolePermissionSeeder extends Seeder
             $permissions['books.create'],
             $permissions['books.update'],
             $permissions['books.delete'],
+
+            $permissions['users.view'],
+            $permissions['users.create'],
+            $permissions['users.update'],
+            $permissions['users.delete'],
         ]);
 
         // Admin
@@ -32,6 +37,11 @@ class RolePermissionSeeder extends Seeder
             $permissions['books.create'],
             $permissions['books.update'],
             $permissions['books.delete'],
+
+            $permissions['users.view'],
+            $permissions['users.create'],
+            $permissions['users.update'],
+            $permissions['users.delete'],
         ]);
 
         // Petugas
@@ -39,6 +49,7 @@ class RolePermissionSeeder extends Seeder
             $permissions['books.view'],
             $permissions['books.create'],
             $permissions['books.update'],
+            
         ]);
 
         // Member

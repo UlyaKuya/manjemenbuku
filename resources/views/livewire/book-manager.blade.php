@@ -2,6 +2,7 @@
 
     <div class="bg-white shadow-sm rounded-xl border border-gray-200">
 
+        {{-- HEADER --}}
         <div class="flex items-center justify-between px-6 py-5 border-b">
 
             <div>
@@ -14,24 +15,68 @@
                 </p>
             </div>
 
+            {{-- TAMBAH BUKU --}}
             @can('create', App\Models\Book::class)
-            <button
+            <x-ui.button
                 wire:click="create"
-                class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
+                variant="primary">
                 Tambah Buku
-            </button>
+            </x-ui.button>
             @endcan
+
         </div>
 
+
+        {{-- SUCCESS MESSAGE --}}
+        {{-- SUCCESS MESSAGE --}}
         @if(session()->has('success'))
-        <div class="mb-4 rounded-lg bg-green-100 border border-green-300 text-green-700 px-4 py-3">
-            {{ session('success') }}
+
+        <div class="px-6 pt-4">
+
+            <x-ui.alert variant="success">
+                {{ session('success') }}
+            </x-ui.alert>
+
         </div>
+
         @endif
 
 
+        {{-- ERROR MESSAGE --}}
+        @if(session()->has('error'))
+
+        <div class="px-6 pt-4">
+
+            <x-ui.alert variant="error">
+                {{ session('error') }}
+            </x-ui.alert>
+
+        </div>
+
+        @endif
+
+
+        {{-- WARNING MESSAGE --}}
+        @if(session()->has('warning'))
+
+        <div class="px-6 pt-4">
+
+            <x-ui.alert variant="warning">
+                {{ session('warning') }}
+            </x-ui.alert>
+
+        </div>
+
+        @endif
+
+
+
+
+
+        {{-- CONTENT --}}
         <div class="p-6">
 
+            {{-- SEARCH --}}
             <div class="flex justify-between mb-5">
 
                 <input
@@ -42,39 +87,67 @@
 
                 <span class="text-gray-500 text-sm">
                     Total Buku :
-                    <strong>{{ $books->count() }}</strong>
+                    <strong>{{ $books->total() }}</strong>
                 </span>
 
             </div>
 
+
+            {{-- TABLE / EMPTY STATE --}}
             <div class="overflow-x-auto">
 
                 @php
-                $showAction = auth()->user()->hasPermission('books.update')
+                $showAction =
+                auth()->user()->hasPermission('books.update')
                 || auth()->user()->hasPermission('books.delete');
                 @endphp
 
+
+                @if($books->count() > 0)
+
+                {{-- TABLE --}}
                 <table class="min-w-full divide-y divide-gray-200">
 
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-4 py-3 text-left">No</th>
-                            <th class="px-4 py-3 text-left">Judul</th>
-                            <th class="px-4 py-3 text-left">Penulis</th>
-                            <th class="px-4 py-3 text-left">Penerbit</th>
-                            <th class="px-4 py-3 text-left">Tahun</th>
+
+                            <th class="px-4 py-3 text-left">
+                                No
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                Judul
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                Penulis
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                Penerbit
+                            </th>
+
+                            <th class="px-4 py-3 text-left">
+                                Tahun
+                            </th>
 
                             @if($showAction)
-                            <th class="px-4 py-3 text-center">Aksi</th>
+                            <th class="px-4 py-3 text-center">
+                                Aksi
+                            </th>
                             @endif
+
                         </tr>
                     </thead>
 
+
                     <tbody class="divide-y divide-gray-100 bg-white">
 
-                        @forelse($books as $book)
+                        @foreach($books as $book)
 
-                        <tr wire:key="book-{{ $book->id }}" class="hover:bg-gray-50">
+                        <tr
+                            wire:key="book-{{ $book->id }}"
+                            class="hover:bg-gray-50">
 
                             <td class="px-4 py-3">
                                 {{ $books->firstItem() + $loop->index }}
@@ -96,49 +169,82 @@
                                 {{ $book->year }}
                             </td>
 
+
+                            {{-- ACTION --}}
                             @if($showAction)
+
                             <td class="px-4 py-3 text-center space-x-2">
 
+                                {{-- EDIT --}}
                                 @can('update', $book)
-                                <button
+
+                                <x-ui.button
                                     wire:click="edit({{ $book->id }})"
-                                    class="px-3 py-1 rounded bg-amber-500 hover:bg-amber-600 text-white">
+                                    variant="secondary"
+                                    size="sm">
                                     Edit
-                                </button>
+                                </x-ui.button>
+
                                 @endcan
 
+
+                                {{-- DELETE --}}
                                 @can('delete', $book)
-                                <button
+
+                                <x-ui.button
                                     wire:click="confirmDelete({{ $book->id }})"
-                                    class="px-3 py-1 rounded bg-red-600 hover:bg-red-700 text-white">
+                                    variant="danger"
+                                    size="sm">
                                     Hapus
-                                </button>
+                                </x-ui.button>
+
                                 @endcan
 
                             </td>
+
                             @endif
 
                         </tr>
 
-                        @empty
-
-                        <tr>
-                            <td colspan="{{ $showAction ? 6 : 5 }}" class="text-center py-10 text-gray-500">
-                                Belum ada data buku.
-                            </td>
-                        </tr>
-
-                        @endforelse
+                        @endforeach
 
                     </tbody>
 
                 </table>
 
-                {{-- Pagination --}}
-                <div class="mt-6">
-                    {{ $books->links() }}
-                </div>
 
+                @else
+
+                {{-- EMPTY STATE --}}
+                <x-ui.empty-state
+                    icon="📚"
+                    title="Belum ada data buku"
+                    subtitle="Silakan tambahkan buku pertama ke perpustakaan.">
+
+                    <x-slot:action>
+
+                        @can('create', App\Models\Book::class)
+
+                        <x-ui.button
+                            wire:click="create"
+                            variant="primary">
+                            Tambah Buku
+                        </x-ui.button>
+
+                        @endcan
+
+                    </x-slot:action>
+
+                </x-ui.empty-state>
+
+                @endif
+
+            </div>
+
+
+            {{-- PAGINATION --}}
+            <div class="mt-6">
+                {{ $books->links() }}
             </div>
 
         </div>
@@ -146,24 +252,34 @@
     </div>
 
 
-
-
+    {{-- ========================================================= --}}
     {{-- MODAL TAMBAH / EDIT --}}
+    {{-- ========================================================= --}}
+
     @if($showModal)
 
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
         <div class="bg-white rounded-xl shadow-xl w-full max-w-lg">
 
+            {{-- MODAL HEADER --}}
             <div class="border-b px-6 py-4">
+
                 <h2 class="text-xl font-semibold">
+
                     {{ $isEdit ? 'Edit Buku' : 'Tambah Buku' }}
+
                 </h2>
+
             </div>
 
+
+            {{-- FORM --}}
             <div class="p-6 space-y-4">
 
+                {{-- TITLE --}}
                 <div>
+
                     <input
                         wire:model.live="title"
                         type="text"
@@ -171,11 +287,17 @@
                         class="w-full rounded-lg border-gray-300">
 
                     @error('title')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
                     @enderror
+
                 </div>
 
+
+                {{-- AUTHOR --}}
                 <div>
+
                     <input
                         wire:model.live="author"
                         type="text"
@@ -183,11 +305,17 @@
                         class="w-full rounded-lg border-gray-300">
 
                     @error('author')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
                     @enderror
+
                 </div>
 
+
+                {{-- PUBLISHER --}}
                 <div>
+
                     <input
                         wire:model.live="publisher"
                         type="text"
@@ -195,11 +323,17 @@
                         class="w-full rounded-lg border-gray-300">
 
                     @error('publisher')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
                     @enderror
+
                 </div>
 
+
+                {{-- YEAR --}}
                 <div>
+
                     <input
                         wire:model.live="year"
                         type="number"
@@ -207,25 +341,31 @@
                         class="w-full rounded-lg border-gray-300">
 
                     @error('year')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-red-500 text-sm mt-1">
+                        {{ $message }}
+                    </p>
                     @enderror
+
                 </div>
 
             </div>
 
+
+            {{-- MODAL FOOTER --}}
             <div class="border-t px-6 py-4 flex justify-end gap-2">
 
                 <button
+                    type="button"
                     wire:click="closeModal"
                     class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">
                     Batal
                 </button>
 
-                <button
+                <x-ui.button
                     wire:click="save"
-                    class="px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white">
+                    variant="primary">
                     {{ $isEdit ? 'Update' : 'Simpan' }}
-                </button>
+                </x-ui.button>
 
             </div>
 
@@ -236,38 +376,50 @@
     @endif
 
 
+    {{-- ========================================================= --}}
     {{-- MODAL DELETE --}}
+    {{-- ========================================================= --}}
+
     @if($showDeleteModal)
 
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
 
         <div class="bg-white rounded-xl shadow-xl w-full max-w-md">
 
+            {{-- HEADER --}}
             <div class="px-6 py-5 border-b">
+
                 <h2 class="text-xl font-semibold text-red-600">
                     Hapus Buku
                 </h2>
+
             </div>
 
+
+            {{-- CONTENT --}}
             <div class="p-6">
+
                 <p class="text-gray-600">
                     Apakah Anda yakin ingin menghapus buku ini?
                 </p>
+
             </div>
 
+
+            {{-- FOOTER --}}
             <div class="px-6 py-4 border-t flex justify-end gap-2">
 
-                <button
-                    wire:click="$set('showDeleteModal', false)"
-                    class="px-4 py-2 rounded-lg bg-gray-300 hover:bg-gray-400">
+                <x-ui.button
+                    wire:click="closeDeleteModal"
+                    variant="secondary">
                     Batal
-                </button>
+                </x-ui.button>
 
-                <button
+                <x-ui.button
                     wire:click="delete"
-                    class="px-4 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white">
+                    variant="danger">
                     Ya, Hapus
-                </button>
+                </x-ui.button>
 
             </div>
 
