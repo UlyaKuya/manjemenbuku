@@ -1,3 +1,5 @@
-<x-layouts.app>
+<x-app-layout>
+
     <livewire:category-manager />
-</x-layouts.app>
+
+</x-app-layout>

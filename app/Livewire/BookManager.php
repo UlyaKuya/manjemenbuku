@@ -2,17 +2,15 @@
 
 namespace App\Livewire;
 
-
 use App\Models\Book;
+use App\Models\Category;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
 
-
 #[Layout('layouts.app')]
 class BookManager extends Component
-
 {
     use WithPagination;
 
@@ -28,6 +26,8 @@ class BookManager extends Component
 
     public bool $isEdit = false;
 
+    public ?int $category_id = null;
+
     #[Validate('required|min:3')]
     public string $title = '';
 
@@ -40,10 +40,9 @@ class BookManager extends Component
     #[Validate('required|digits:4')]
     public string $year = '';
 
-
     public function render()
     {
-        $books = Book::query()
+        $books = Book::with('category')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('title', 'like', "%{$this->search}%")
@@ -54,7 +53,12 @@ class BookManager extends Component
             ->orderByDesc('id')
             ->paginate(3);
 
-        return view('livewire.book-manager', compact('books'));
+        $categories = Category::orderBy('name')->get();
+
+        return view('livewire.book-manager', compact(
+            'books',
+            'categories'
+        ));
     }
 
     public function create()
@@ -67,15 +71,12 @@ class BookManager extends Component
             'author',
             'publisher',
             'year',
+            'category_id',
         ]);
 
         $this->isEdit = false;
         $this->showModal = true;
     }
-
-
-
-
 
     public function save()
     {
@@ -92,18 +93,21 @@ class BookManager extends Component
                 'author' => $this->author,
                 'publisher' => $this->publisher,
                 'year' => $this->year,
+                'category_id' => $this->category_id,
             ]);
 
             session()->flash('success', 'Buku berhasil diperbarui.');
+
         } else {
 
             $this->authorize('create', Book::class);
 
             Book::create([
-                'title'     => $this->title,
-                'author'    => $this->author,
+                'title' => $this->title,
+                'author' => $this->author,
                 'publisher' => $this->publisher,
-                'year'      => $this->year,
+                'year' => $this->year,
+                'category_id' => $this->category_id,
             ]);
 
             session()->flash('success', 'Buku berhasil ditambahkan.');
@@ -115,24 +119,22 @@ class BookManager extends Component
             'author',
             'publisher',
             'year',
+            'category_id',
         ]);
 
         $this->isEdit = false;
         $this->showModal = false;
     }
 
-    public function edit(int $bookId)
+    public function edit(Book $book)
     {
-        $book = Book::findOrFail($bookId);
-
-        $this->authorize('update', $book);
-
         $this->bookId = $book->id;
 
         $this->title = $book->title;
         $this->author = $book->author;
         $this->publisher = $book->publisher;
         $this->year = $book->year;
+        $this->category_id = $book->category_id;
 
         $this->isEdit = true;
         $this->showModal = true;
@@ -164,7 +166,6 @@ class BookManager extends Component
         session()->flash('success', 'Buku berhasil dihapus.');
     }
 
-
     public function closeModal()
     {
         $this->reset([
@@ -173,11 +174,13 @@ class BookManager extends Component
             'author',
             'publisher',
             'year',
+            'category_id',
         ]);
 
         $this->isEdit = false;
         $this->showModal = false;
     }
+
     public function closeDeleteModal()
     {
         $this->deleteId = null;

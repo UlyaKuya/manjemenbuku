@@ -111,25 +111,12 @@
                     <thead class="bg-gray-50">
                         <tr>
 
-                            <th class="px-4 py-3 text-left">
-                                No
-                            </th>
-
-                            <th class="px-4 py-3 text-left">
-                                Judul
-                            </th>
-
-                            <th class="px-4 py-3 text-left">
-                                Penulis
-                            </th>
-
-                            <th class="px-4 py-3 text-left">
-                                Penerbit
-                            </th>
-
-                            <th class="px-4 py-3 text-left">
-                                Tahun
-                            </th>
+                            <th class="px-4 py-3 text-left">No</th>
+                            <th class="px-4 py-3 text-left">Judul</th>
+                            <th class="px-4 py-3 text-left">Penulis</th>
+                            <th class="px-4 py-3 text-left">Penerbit</th>
+                            <th class="px-4 py-3 text-left">Tahun</th>
+                            <th class="px-4 py-3 text-left">Kategori</th>
 
                             @if($showAction)
                             <th class="px-4 py-3 text-center">
@@ -167,6 +154,10 @@
 
                             <td class="px-4 py-3">
                                 {{ $book->year }}
+                            </td>
+
+                            <td class="px-4 py-3">
+                                {{ $book->category?->name ?? '-' }}
                             </td>
 
 
@@ -346,6 +337,26 @@
                     </p>
                     @enderror
 
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        Kategori
+                    </label>
+
+                    <select
+                        wire:model="category_id"
+                        class="w-full rounded-lg border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+
+                        <option value="">Pilih Kategori</option>
+
+                        @foreach($categories as $category)
+                        <option value="{{ $category->id }}">
+                            {{ $category->name }}
+                        </option>
+                        @endforeach
+
+                    </select>
                 </div>
 
             </div>
